@@ -1,10 +1,12 @@
 using AspNetCore.Jwt.Sample.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetDevPack.Identity;
+using NetDevPack.Identity.Data.Enums;
 using NetDevPack.Identity.Jwt;
 
 namespace AspNetCore.Jwt.Sample
@@ -23,7 +25,7 @@ namespace AspNetCore.Jwt.Sample
             services.AddControllers();
 
             // Adding all identity configurations
-            services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType().Namespace,"DefaultConnection");
+            services.AddNetDevPackContextIdentity(DatabaseProviderType.PostgreSql,Configuration, GetType().Namespace,"DefaultConnection");
             services.AddJwtConfiguration(Configuration, "AppSettings");
             services.AddIdentityConfiguration();  // <== This extension returns IdentityBuilder to extends configuration
 
