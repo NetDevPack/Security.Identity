@@ -13,13 +13,17 @@ If you liked the project or if NetDevPack helped you, please give a star ;)
 | ------- | ----- | ----- |
 | `NetDevPack.Identity` | [![NuGet](https://img.shields.io/nuget/v/NetDevPack.Identity.svg)](https://nuget.org/packages/NetDevPack.Identity) | [![Nuget](https://img.shields.io/nuget/dt/NetDevPack.Identity.svg)](https://nuget.org/packages/NetDevPack.Identity) |
 
+
 .NET DevPack.Identity can be installed in your ASP.NET Core application using the Nuget package manager or the `dotnet` CLI.
+
 ```
 dotnet add package NetDevPack.Identity
 ```
+
 If you want to use our IdentityDbContext (ASP.NET Identity standard) you will need to create the Identity tables. Set your connection string in the `appsettings.json` and follow the next steps:
 
 Add the IdentityDbContext configuration in your `startup.cs`:
+
 ```csharp
 services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType().Namespace,"DefaultConnection");
 ```
@@ -29,27 +33,35 @@ services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType()
 >**Note:** If you don't inform the connection string name the value adopted will be _IdentityConnection_
 
 Add the Identity configuration in `ConfigureServices` method of your `startup.cs`:
+
 ```csharp
 services.AddIdentityConfiguration();
 ```
+
 >**Note:** This extension returns an IdentityBuilder to allow you extending the configuration
 
 Add the Identity configuration in `ConfigureServices` method of your `startup.cs`:
+
 ```csharp
 services.AddIdentityConfiguration();
 ```
+
 Add the Identity configuration in `Configure` method of your `startup.cs`:
+
 ```csharp
 app.UseAuthConfiguration();
 ```
+
 >**Note:** This method need to be set between `app.UseRouting()` and `app.UseEndpoints()`
 
 Run the command to generate the migration files:
+
 ```
 dotnet ef migrations add Initial --project <Your patch>/<Your Project>.csproj
 ```
 
 Run the command to generate the database:
+
 ```
 dotnet ef database update --project <Your patch>/<Your Project>.csproj
 ```
@@ -64,17 +76,21 @@ services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType()
 services.AddJwtConfiguration(Configuration, "AppSettings"); // <=== HERE
 services.AddIdentityConfiguration();
 ```
+
 >**Note:** If you don't inform the configuration name the value adopted will be _AppJwtSettings_
 
+
 Set your `appsettings.json` file with this values:
+
 ```json
 "AppSettings": {
     "SecretKey": "MYSECRETSUPERSECRET",
     "Expiration": 2,
     "Issuer": "SampleApp",
-	"Audience": "https://localhost"
+    "Audience": "https://localhost"
 }
 ``` 
+
 |Key|Meaning|
 |--|--|
 |SecretKey  | Is your key to build JWT. This value need to be stored in a safe place in the production way |
@@ -91,14 +107,15 @@ private readonly UserManager<IdentityUser> _userManager;
 private readonly AppJwtSettings _appJwtSettings;
 
 public AuthController(SignInManager<IdentityUser> signInManager,
-				      UserManager<IdentityUser> userManager,
-					  IOptions<AppJwtSettings> appJwtSettings)
+		      UserManager<IdentityUser> userManager,
+		      IOptions<AppJwtSettings> appJwtSettings)
 {
     _signInManager = signInManager;
     _userManager = userManager;
     _appJwtSettings = appJwtSettings.Value;
 }
 ```
+
 >**Note:** The _AppJwtSettings_ is our dependency and is configured internally during JWT setup (in `startup.cs` file). You just need to inject it in your controller.
 >
 >**Note:** The _SignInManager_ and _UserManager_ classes is native from Identity and provided in NetDevPack.Identity. You just need to inject it in your controller.
@@ -112,10 +129,12 @@ return new JwtBuilder()
 	.WithEmail(email)
 	.BuildToken();
 ```
+
 >**Note:** This builder can return a single string with JWT or a complex object `UserResponse` if you want return more data than a single JWT string.
 
 #### Adding Claims to your JWT
 You can call more methods in `JwtBuilder` to provide more information about the user:
+
 ```csharp
 return new JwtBuilder()
     .WithUserManager(_userManager)
@@ -126,6 +145,7 @@ return new JwtBuilder()
     .WithUserRoles()
     .BuildToken();
 ```
+
 |Method|Meaning|
 |--|--|
 |WithJwtClaims()| Claims of JWT like `sub`, `jti`, `nbf` and others |
@@ -134,6 +154,7 @@ return new JwtBuilder()
 |BuildToken()| Build and return the JWT as single string  |
 
 If you want return your complex object `UserResponse` you need to change the last method to:
+
 ```csharp
 return new JwtBuilder()
     .WithUserManager(_userManager)
