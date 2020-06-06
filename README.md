@@ -169,5 +169,8 @@ return new JwtBuilder()
 ## Examples
 Use the [sample application](https://github.com/NetDevPack/NetDevPack.Identity/tree/master/src/Samples/AspNetCore.Jwt.Sample) to understand how NetDevPack.Identity can be implemented and help you to decrease the complexity of your application and development time.
 
+## Compatibility
+The **NetDevPack.Identity** was developed to be implemented in **ASP.NET Core 3.1** `LTS` applications, in the next versions will be add the 2.1 `LTS` support.
+
 ## About
-.NET DevPack was developed by [Eduardo Pires](http://eduardopires.net.br) under the [MIT license](LICENSE).
+.NET DevPack.Identity was developed by [Eduardo Pires](http://eduardopires.net.br) under the [MIT license](LICENSE).
