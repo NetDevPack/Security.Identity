@@ -1,3 +1,4 @@
+
 <img src="https://repository-images.githubusercontent.com/268701472/8bf84980-a6ce-11ea-83da-e2133c5a3a7a" alt=".NET DevPack" width="300px" />
 
 What is the .NET DevPack.Identity?
@@ -25,12 +26,14 @@ If you want to use our IdentityDbContext (ASP.NET Identity standard) you will ne
 Add the IdentityDbContext configuration in your `startup.cs`:
 
 ```csharp
-services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType().Namespace,"DefaultConnection");
+services.AddIdentityEntityFrameworkContextConfiguration(options => 
+	options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+	b=>b.MigrationsAssembly("AspNetCore.Jwt.Sample")));
 ```
 
->**Note:** You need to inform the namespace to avoid migration errors
+>**Note:** You must inform the namespace to avoid migration errors
 >
->**Note:** If you don't inform the connection string name the value adopted will be _IdentityConnection_
+>**Note:** You must install the `Microsoft.EntityFrameworkCore.SqlServer` or another provider like `Npgsql.EntityFrameworkCore.PostgreSQL` package to have support from your database. Find the package for your database [here](https://docs.microsoft.com/en-us/ef/core/providers/?tabs=dotnet-core-cli)
 
 Add the Identity configuration in `ConfigureServices` method of your `startup.cs`:
 
@@ -39,12 +42,6 @@ services.AddIdentityConfiguration();
 ```
 
 >**Note:** This extension returns an IdentityBuilder to allow you extending the configuration
-
-Add the Identity configuration in `ConfigureServices` method of your `startup.cs`:
-
-```csharp
-services.AddIdentityConfiguration();
-```
 
 Add the Identity configuration in `Configure` method of your `startup.cs`:
 
@@ -57,24 +54,22 @@ app.UseAuthConfiguration();
 Run the command to generate the migration files:
 
 ```
-dotnet ef migrations add Initial --project <Your patch>/<Your Project>.csproj
+dotnet ef migrations add Initial --context NetDevPackAppDbContext --project <Your patch>/<Your Project>.csproj
 ```
 
 Run the command to generate the database:
 
 ```
-dotnet ef database update --project <Your patch>/<Your Project>.csproj
+dotnet ef database update --context NetDevPackAppDbContext --project <Your patch>/<Your Project>.csproj
 ```
+>**Note:** If are you using your own `IdentityDbContext` you must change the `NetDevPackAppDbContext` value to your context class name in the commands above.
 
 After execute this steps you will be all set to use the Identity in your Application.
 
 ### Configuring JWT
-If you want to generate JSON Web Tokens in your application you need to add the JWT configuration in `ConfigureServices` method of your `startup.cs` like the sample below:
-
+If you want to generate JSON Web Tokens in your application you need to add the JWT configuration in `ConfigureServices` method of your `startup.cs`
 ```csharp
-services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType().Namespace,"DefaultConnection");
-services.AddJwtConfiguration(Configuration, "AppSettings"); // <=== HERE
-services.AddIdentityConfiguration();
+services.AddJwtConfiguration(Configuration, "AppSettings");
 ```
 
 >**Note:** If you don't inform the configuration name the value adopted will be _AppJwtSettings_

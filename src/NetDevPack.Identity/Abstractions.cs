@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetDevPack.Identity.Data;
 
@@ -55,15 +54,11 @@ namespace NetDevPack.Identity
         }
 
         public static IServiceCollection AddIdentityEntityFrameworkContextConfiguration(
-            this IServiceCollection services, IConfiguration configuration, string migrationAssembly, string identityConnectionName = null)
+            this IServiceCollection services, Action<DbContextOptionsBuilder> options)
         {
             if (services == null) throw new ArgumentException(nameof(services));
-            if (configuration == null) throw new ArgumentException(nameof(configuration));
-            if (string.IsNullOrEmpty(migrationAssembly)) throw new ArgumentException(nameof(migrationAssembly));
-
-            return services.AddDbContext<NetDevPackAppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString(identityConnectionName ?? "IdentityConnection"),
-                    b => b.MigrationsAssembly(migrationAssembly)));
+            if (options == null) throw new ArgumentException(nameof(options));
+            return services.AddDbContext<NetDevPackAppDbContext>(options);
         }
 
         public static IApplicationBuilder UseAuthConfiguration(this IApplicationBuilder app)

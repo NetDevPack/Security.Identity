@@ -12,12 +12,12 @@
     <PackageDescription>.NET DevPack Identity is a set of common implementations to help you implementing Identity, Jwt, claims validation and another facilities</PackageDescription>
     <PackageProjectUrl>https://github.com/EduardoPires/NetDevPack</PackageProjectUrl>
     <PackageId>NetDevPack.Identity</PackageId>
-    <PackageIcon>Icon.png</PackageIcon>
+    <PackageIcon>IconNuget.png</PackageIcon>
     <RepositoryUrl>https://github.com/EduardoPires/NetDevPack</RepositoryUrl>
     <Authors>EduardoPires</Authors>
     <RepositoryType>Public</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,11 +25,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />    
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\img\Icon.png">
+    <None Include="..\..\..\img\IconNuget.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

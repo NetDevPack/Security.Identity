@@ -1,2 +1,9 @@
-dotnet ef migrations add Initial --project src\Samples\AspNetCore.Jwt.Sample\AspNetCore.Jwt.Sample.csproj
-dotnet ef database update --project src\Samples\AspNetCore.Jwt.Sample\AspNetCore.Jwt.Sample.csproj
+Default configuration:
+
+dotnet ef migrations add Initial --context NetDevPackAppDbContext --project src\Samples\AspNetCore.Jwt.Sample\AspNetCore.Jwt.Sample.csproj
+dotnet ef database update --context NetDevPackAppDbContext --project src\Samples\AspNetCore.Jwt.Sample\AspNetCore.Jwt.Sample.csproj
+
+Custom configuration:
+
+dotnet ef migrations add Initial --context MyIdentityContext --project src\Samples\AspNetCore.Jwt.Sample\AspNetCore.Jwt.Sample.csproj
+dotnet ef database update --context MyIdentityContext --project src\Samples\AspNetCore.Jwt.Sample\AspNetCore.Jwt.Sample.csproj
