@@ -20,6 +20,16 @@ namespace NetDevPack.Identity
                 .AddDefaultTokenProviders();
         }
 
+        public static IdentityBuilder AddMySqlIdentityConfiguration(this IServiceCollection services)
+        {
+            if (services == null) throw new ArgumentException(nameof(services));
+
+            return services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<NetDevPackAppMySqlDbContext>()
+                .AddDefaultTokenProviders();
+        }
+
         public static IServiceCollection AddIdentityEntityFrameworkContextConfiguration(
             this IServiceCollection services, IConfiguration configuration, string migrationAssembly, string identityConnectionName = null)
         {
@@ -29,6 +39,18 @@ namespace NetDevPack.Identity
 
             return services.AddDbContext<NetDevPackAppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString(identityConnectionName ?? "IdentityConnection"),
+                    b => b.MigrationsAssembly(migrationAssembly)));
+        }
+
+        public static IServiceCollection AddMySqlIdentityEntityFrameworkContextConfiguration(
+            this IServiceCollection services, IConfiguration configuration, string migrationAssembly, string identityConnectionName = null)
+        {
+            if (services == null) throw new ArgumentException(nameof(services));
+            if (configuration == null) throw new ArgumentException(nameof(configuration));
+            if (string.IsNullOrEmpty(migrationAssembly)) throw new ArgumentException(nameof(migrationAssembly));
+
+            return services.AddDbContext<NetDevPackAppMySqlDbContext>(options =>
+                options.UseMySql(configuration.GetConnectionString(identityConnectionName ?? "IdentityConnection"),
                     b => b.MigrationsAssembly(migrationAssembly)));
         }
 
