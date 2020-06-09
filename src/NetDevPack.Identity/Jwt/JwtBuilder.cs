@@ -10,30 +10,30 @@ using NetDevPack.Identity.Jwt.Model;
 
 namespace NetDevPack.Identity.Jwt
 {
-    public sealed class JwtBuilder
+    public class JwtBuilder<TIdentityUser> where TIdentityUser : IdentityUser
     {
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<TIdentityUser> _userManager;
         private AppJwtSettings _appJwtSettings;
-        private IdentityUser _user;
+        private TIdentityUser _user;
         private ICollection<Claim> _userClaims;
         private ICollection<Claim> _jwtClaims;
         private ClaimsIdentity _identityClaims;
 
-        public JwtBuilder WithUserManager(UserManager<IdentityUser> userManager)
+        public JwtBuilder<TIdentityUser> WithUserManager(UserManager<TIdentityUser> userManager)
         {
             _userManager = userManager ?? throw new ArgumentException(nameof(userManager));
             return this;
         }
 
-        public JwtBuilder WithJwtSettings(AppJwtSettings appJwtSettings)
+        public JwtBuilder<TIdentityUser> WithJwtSettings(AppJwtSettings appJwtSettings)
         {
             _appJwtSettings = appJwtSettings ?? throw new ArgumentException(nameof(appJwtSettings));
             return this;
         }
 
-        public JwtBuilder WithEmail(string email)
+        public JwtBuilder<TIdentityUser> WithEmail(string email)
         {
-            if(string.IsNullOrEmpty(email)) throw new ArgumentException(nameof(email));
+            if (string.IsNullOrEmpty(email)) throw new ArgumentException(nameof(email));
 
             _user = _userManager.FindByEmailAsync(email).Result;
             _userClaims = new List<Claim>();
@@ -43,7 +43,7 @@ namespace NetDevPack.Identity.Jwt
             return this;
         }
 
-        public JwtBuilder WithJwtClaims()
+        public JwtBuilder<TIdentityUser> WithJwtClaims()
         {
             _jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Sub, _user.Id));
             _jwtClaims.Add(new Claim(JwtRegisteredClaimNames.Email, _user.Email));
@@ -56,7 +56,7 @@ namespace NetDevPack.Identity.Jwt
             return this;
         }
 
-        public JwtBuilder WithUserClaims()
+        public JwtBuilder<TIdentityUser> WithUserClaims()
         {
             _userClaims = _userManager.GetClaimsAsync(_user).Result;
             _identityClaims.AddClaims(_userClaims);
@@ -64,10 +64,10 @@ namespace NetDevPack.Identity.Jwt
             return this;
         }
 
-        public JwtBuilder WithUserRoles()
+        public JwtBuilder<TIdentityUser> WithUserRoles()
         {
             var userRoles = _userManager.GetRolesAsync(_user).Result;
-            userRoles.ToList().ForEach(r=> _identityClaims.AddClaim(new Claim("role", r)));
+            userRoles.ToList().ForEach(r => _identityClaims.AddClaim(new Claim("role", r)));
 
             return this;
         }
@@ -86,7 +86,7 @@ namespace NetDevPack.Identity.Jwt
                     SecurityAlgorithms.HmacSha256Signature)
             });
 
-            return tokenHandler.WriteToken(token); 
+            return tokenHandler.WriteToken(token);
         }
 
         public UserResponse BuildUserResponse()
@@ -109,5 +109,10 @@ namespace NetDevPack.Identity.Jwt
         private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .TotalSeconds);
+    }
+
+    public sealed class JwtBuilder : JwtBuilder<IdentityUser>
+    {
+        
     }
 }

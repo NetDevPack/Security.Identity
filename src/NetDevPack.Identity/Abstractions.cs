@@ -20,6 +20,40 @@ namespace NetDevPack.Identity
                 .AddDefaultTokenProviders();
         }
 
+        public static IdentityBuilder AddDefaultIdentity(this IServiceCollection services, Action<IdentityOptions> options = null)
+        {
+            if (services == null) throw new ArgumentException(nameof(services));
+
+            return services.AddDefaultIdentity<IdentityUser>(options);
+        }
+
+        public static IdentityBuilder AddCustomIdentity<TIdentityUser>(this IServiceCollection services, Action<IdentityOptions> options = null) where TIdentityUser : IdentityUser
+        {
+            if (services == null) throw new ArgumentException(nameof(services));
+
+            return services.AddDefaultIdentity<TIdentityUser>(options);
+        }
+
+        public static IdentityBuilder AddDefaultRoles(this IdentityBuilder builder)
+        {
+            return builder.AddRoles<IdentityRole>();
+        }
+
+        public static IdentityBuilder AddCustomRoles<TRole>(this IdentityBuilder builder) where TRole : IdentityRole
+        {
+            return builder.AddRoles<TRole>();
+        }
+
+        public static IdentityBuilder AddDefaultEntityFrameworkStores(this IdentityBuilder builder)
+        {
+            return builder.AddEntityFrameworkStores<NetDevPackAppDbContext>();
+        }
+
+        public static IdentityBuilder AddCustomEntityFrameworkStores<TContext>(this IdentityBuilder builder) where TContext : DbContext
+        {
+            return builder.AddEntityFrameworkStores<TContext>();
+        }
+
         public static IServiceCollection AddIdentityEntityFrameworkContextConfiguration(
             this IServiceCollection services, IConfiguration configuration, string migrationAssembly, string identityConnectionName = null)
         {

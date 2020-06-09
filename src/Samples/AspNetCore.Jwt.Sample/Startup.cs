@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetDevPack.Identity;
-using NetDevPack.Identity.Jwt;
+using NetDevPack.Identity.User;
 
 namespace AspNetCore.Jwt.Sample
 {
@@ -22,12 +22,18 @@ namespace AspNetCore.Jwt.Sample
         {
             services.AddControllers();
 
-            // Adding all identity configurations
-            services.AddIdentityEntityFrameworkContextConfiguration(Configuration, GetType().Namespace,"DefaultConnection");
-            services.AddJwtConfiguration(Configuration, "AppSettings");
-            services.AddIdentityConfiguration();  // <== This extension returns IdentityBuilder to extends configuration
+            // When you have specifics configurations (see inside this method)
+            //services.AddCustomIdentityConfiguration(Configuration);
+
+            // When you just want the default configuration
+            services.AddDefaultIdentityConfiguration(Configuration);         
+
+            // Setting the interactive AspNetUser (logged in)
+            services.AddAspNetUserConfiguration();
 
             services.AddSwaggerConfiguration();
+
+            services.AddDependencyInjectionConfiguration();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
