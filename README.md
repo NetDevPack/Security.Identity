@@ -162,8 +162,10 @@ return new JwtBuilder()
     .WithJwtClaims()
     .WithUserClaims()
     .WithUserRoles()
-    .BuildUserResponse();
+    .BuildUserResponse() as UserResponse;
 ```
+
+>**Note:** The safe cast to `UserResponse` is needed because is a subtype of `UserResponse<TKey>`.
 
 ## Examples
 Use the [sample application](https://github.com/NetDevPack/NetDevPack.Identity/tree/master/src/Samples/AspNetCore.Jwt.Sample) to understand how NetDevPack.Identity can be implemented and help you to decrease the complexity of your application and development time.
