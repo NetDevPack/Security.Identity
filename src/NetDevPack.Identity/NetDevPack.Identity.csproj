@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\img\IconNuget.png">
+    <None Include="..\..\assets\IconNuget.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
