@@ -1,11 +1,13 @@
-
 <img src="https://repository-images.githubusercontent.com/268701472/8bf84980-a6ce-11ea-83da-e2133c5a3a7a" alt=".NET DevPack" width="300px" />
 
 What is the .NET DevPack.Identity?
 =====================
 .NET DevPack Identity is a set of common implementations to help you implementing ASP.NET Identity, JWT, claims validation and another facilities
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f1bd42eda59844ea95852606741147fa)](https://www.codacy.com/gh/NetDevPack/NetDevPack.Identity?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NetDevPack/NetDevPack.Identity&amp;utm_campaign=Badge_Grade)
 [![Build status](https://ci.appveyor.com/api/projects/status/e283g9ik4rk3ymsp?svg=true)](https://ci.appveyor.com/project/EduardoPires/netdevpack-identity)
+![.NET Core](https://github.com/NetDevPack/NetDevPack.Identity/workflows/.NET%20Core/badge.svg)
+[![License](http://img.shields.io/github/license/NetDevPack/NetDevPack.Identity.svg)](LICENSE)
 
 ## Give a Star! :star:
 If you liked the project or if NetDevPack helped you, please give a star ;)
@@ -160,8 +162,10 @@ return new JwtBuilder()
     .WithJwtClaims()
     .WithUserClaims()
     .WithUserRoles()
-    .BuildUserResponse();
+    .BuildUserResponse() as UserResponse;
 ```
+
+>**Note:** The safe cast to `UserResponse` is needed because is a subtype of `UserResponse<TKey>`.
 
 ## Examples
 Use the [sample application](https://github.com/NetDevPack/NetDevPack.Identity/tree/master/src/Samples/AspNetCore.Jwt.Sample) to understand how NetDevPack.Identity can be implemented and help you to decrease the complexity of your application and development time.
