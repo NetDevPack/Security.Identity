@@ -117,4 +117,9 @@ namespace NetDevPack.Identity.Jwt
     {
         
     }
+
+    public sealed class JwtBuilder : JwtBuilder<IdentityUser<string>, string>
+    {
+
+    }
 }
