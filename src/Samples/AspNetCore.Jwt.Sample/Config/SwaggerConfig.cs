@@ -11,7 +11,7 @@ namespace AspNetCore.Jwt.Sample.Config
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo()
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "NetDevPack Identity Sample API",
                     Description = "Developed by Eduardo Pires - Owner @ desenvolvedor.io",

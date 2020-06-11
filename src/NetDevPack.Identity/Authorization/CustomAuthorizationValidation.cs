@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace NetDevPack.Identity.Authorization
 {
-    public class CustomAuthorizationValidation
+    public static class CustomAuthorizationValidation
     {
         public static bool UserHasValidClaim(HttpContext context, string claimName, string claimValue)
         {
