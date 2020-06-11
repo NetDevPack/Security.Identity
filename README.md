@@ -5,6 +5,8 @@ What is the .NET DevPack.Identity?
 =====================
 .NET DevPack Identity is a set of common implementations to help you implementing ASP.NET Identity, JWT, claims validation and another facilities
 
+[![Build status](https://ci.appveyor.com/api/projects/status/e283g9ik4rk3ymsp?svg=true)](https://ci.appveyor.com/project/EduardoPires/netdevpack-identity)
+
 ## Give a Star! :star:
 If you liked the project or if NetDevPack helped you, please give a star ;)
 
