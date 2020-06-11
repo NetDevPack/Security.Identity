@@ -9,7 +9,7 @@ namespace AspNetCore.Jwt.Sample.Controllers
     [ApiController]
     public abstract class MainController : ControllerBase
     {
-        public ICollection<string> Errors = new List<string>();
+        private readonly ICollection<string> Errors = new List<string>();
 
         protected ActionResult CustomResponse(object result = null)
         {

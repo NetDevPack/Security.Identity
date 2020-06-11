@@ -15,8 +15,8 @@ namespace AspNetCore.Jwt.Sample.Config
                 {
                     Title = "NetDevPack Identity Sample API",
                     Description = "Developed by Eduardo Pires - Owner @ desenvolvedor.io",
-                    Contact = new OpenApiContact() { Name = "Eduardo Pires", Email = "contato@eduardopires.net.br" },
-                    License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
+                    Contact = new OpenApiContact { Name = "Eduardo Pires", Email = "contato@eduardopires.net.br" },
+                    License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
                 });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
