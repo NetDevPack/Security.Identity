@@ -6,6 +6,8 @@ What is the .NET DevPack.Identity?
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f1bd42eda59844ea95852606741147fa)](https://www.codacy.com/gh/NetDevPack/NetDevPack.Identity?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NetDevPack/NetDevPack.Identity&amp;utm_campaign=Badge_Grade)
 [![Build status](https://ci.appveyor.com/api/projects/status/e283g9ik4rk3ymsp?svg=true)](https://ci.appveyor.com/project/EduardoPires/netdevpack-identity)
+![.NET Core](https://github.com/NetDevPack/NetDevPack.Identity/workflows/.NET%20Core/badge.svg)
+[![License](http://img.shields.io/github/license/NetDevPack/NetDevPack.Identity.svg)](LICENSE)
 
 ## Give a Star! :star:
 If you liked the project or if NetDevPack helped you, please give a star ;)
