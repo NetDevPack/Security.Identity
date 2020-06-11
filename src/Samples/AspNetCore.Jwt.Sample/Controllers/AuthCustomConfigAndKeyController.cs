@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.Jwt.Sample.Config;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -8,15 +9,15 @@ using NetDevPack.Identity.Model;
 
 namespace AspNetCore.Jwt.Sample.Controllers
 {
-    [Route("api/account")]
-    public class AuthController : MainController
+    [Route("api/custom-account-key")]
+    public class AuthCustomConfigAndKeyController : MainController
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<MyIntIdentityUser> _signInManager;
+        private readonly UserManager<MyIntIdentityUser> _userManager;
         private readonly AppJwtSettings _appJwtSettings;
 
-        public AuthController(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+        public AuthCustomConfigAndKeyController(SignInManager<MyIntIdentityUser> signInManager,
+            UserManager<MyIntIdentityUser> userManager,
             IOptions<AppJwtSettings> appJwtSettings)
         {
             _signInManager = signInManager;
@@ -29,7 +30,7 @@ namespace AspNetCore.Jwt.Sample.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var user = new IdentityUser
+            var user = new MyIntIdentityUser
             {
                 UserName = registerUser.Email,
                 Email = registerUser.Email,
@@ -79,21 +80,21 @@ namespace AspNetCore.Jwt.Sample.Controllers
             return CustomResponse();
         }
 
-        private UserResponse GetUserResponse(string email)
+        private UserResponse<int> GetUserResponse(string email)
         {
-            return new JwtBuilder()
+            return new JwtBuilder<MyIntIdentityUser, int>()
                 .WithUserManager(_userManager)
                 .WithJwtSettings(_appJwtSettings)
                 .WithEmail(email)
                 .WithJwtClaims()
                 .WithUserClaims()
                 .WithUserRoles()
-                .BuildUserResponse() as UserResponse;
+                .BuildUserResponse();
         }
 
         private string GetFullJwt(string email)
         {
-            return new JwtBuilder()
+            return new JwtBuilder<MyIntIdentityUser, int>()
                 .WithUserManager(_userManager)
                 .WithJwtSettings(_appJwtSettings)
                 .WithEmail(email)
@@ -105,7 +106,7 @@ namespace AspNetCore.Jwt.Sample.Controllers
 
         private string GetJwtWithoutClaims(string email)
         {
-            return new JwtBuilder()
+            return new JwtBuilder<MyIntIdentityUser, int>()
                 .WithUserManager(_userManager)
                 .WithJwtSettings(_appJwtSettings)
                 .WithEmail(email)
@@ -114,7 +115,7 @@ namespace AspNetCore.Jwt.Sample.Controllers
 
         private string GetJwtWithUserClaims(string email)
         {
-            return new JwtBuilder()
+            return new JwtBuilder<MyIntIdentityUser, int>()
                 .WithUserManager(_userManager)
                 .WithJwtSettings(_appJwtSettings)
                 .WithEmail(email)

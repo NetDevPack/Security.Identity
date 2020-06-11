@@ -16,18 +16,21 @@ namespace AspNetCore.Jwt.Sample
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
+            // When you just want the default configuration
+            //services.AddDefaultIdentityConfiguration(Configuration);    
+
             // When you have specifics configurations (see inside this method)
             //services.AddCustomIdentityConfiguration(Configuration);
 
-            // When you just want the default configuration
-            services.AddDefaultIdentityConfiguration(Configuration);         
-
+            // When you have specifics configurations (with Key type [see inside this method])
+            services.AddCustomIdentityAndKeyConfiguration(Configuration);
+            
             // Setting the interactive AspNetUser (logged in)
             services.AddAspNetUserConfiguration();
 
@@ -36,7 +39,7 @@ namespace AspNetCore.Jwt.Sample
             services.AddDependencyInjectionConfiguration();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

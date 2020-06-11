@@ -26,7 +26,17 @@ namespace NetDevPack.Identity
             return services.AddDefaultIdentity<IdentityUser>(options);
         }
 
-        public static IdentityBuilder AddCustomIdentity<TIdentityUser>(this IServiceCollection services, Action<IdentityOptions> options = null) where TIdentityUser : IdentityUser
+        public static IdentityBuilder AddCustomIdentity<TIdentityUser>(this IServiceCollection services, Action<IdentityOptions> options = null) 
+            where TIdentityUser : IdentityUser
+        {
+            if (services == null) throw new ArgumentException(nameof(services));
+
+            return services.AddDefaultIdentity<TIdentityUser>(options);
+        }
+
+        public static IdentityBuilder AddCustomIdentity<TIdentityUser,TKey>(this IServiceCollection services, Action<IdentityOptions> options = null)
+            where TIdentityUser : IdentityUser<TKey>
+            where TKey : IEquatable<TKey>
         {
             if (services == null) throw new ArgumentException(nameof(services));
 
@@ -38,7 +48,15 @@ namespace NetDevPack.Identity
             return builder.AddRoles<IdentityRole>();
         }
 
-        public static IdentityBuilder AddCustomRoles<TRole>(this IdentityBuilder builder) where TRole : IdentityRole
+        public static IdentityBuilder AddCustomRoles<TRole>(this IdentityBuilder builder) 
+            where TRole : IdentityRole
+        {
+            return builder.AddRoles<TRole>();
+        }
+
+        public static IdentityBuilder AddCustomRoles<TRole, TKey>(this IdentityBuilder builder)
+            where TRole : IdentityRole<TKey>
+            where TKey : IEquatable<TKey>
         {
             return builder.AddRoles<TRole>();
         }

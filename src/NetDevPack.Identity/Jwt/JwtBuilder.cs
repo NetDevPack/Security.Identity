@@ -113,8 +113,7 @@ namespace NetDevPack.Identity.Jwt
                 .TotalSeconds);
     }
 
-    public sealed class JwtBuilder<TKey> : JwtBuilder<IdentityUser<TKey>, TKey> where TKey : IEquatable<TKey>
-    {
-        
-    }
+    public class JwtBuilder<TIdentityUser> : JwtBuilder<TIdentityUser, string> where TIdentityUser : IdentityUser<string> { }
+
+    public sealed class JwtBuilder : JwtBuilder<IdentityUser> { }
 }

@@ -8,4 +8,9 @@ namespace NetDevPack.Identity.Jwt.Model
         public string Email { get; set; }
         public IEnumerable<UserClaim> Claims { get; set; }
     }
+
+    public class UserToken : UserToken<string>
+    {
+       
+    }
 }

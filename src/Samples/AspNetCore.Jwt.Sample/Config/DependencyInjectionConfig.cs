@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using NetDevPack.Identity.User;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCore.Jwt.Sample.Config
 {

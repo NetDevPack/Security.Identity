@@ -89,7 +89,7 @@ namespace AspNetCore.Jwt.Sample.Controllers
                 .WithJwtClaims()
                 .WithUserClaims()
                 .WithUserRoles()
-                .BuildUserResponse();
+                .BuildUserResponse() as UserResponse;
         }
 
         private string GetFullJwt(string email)

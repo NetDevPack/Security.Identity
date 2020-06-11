@@ -6,4 +6,9 @@
         public double ExpiresIn { get; set; }
         public UserToken<TKey> UserToken { get; set; }
     }
+
+    public class UserResponse : UserResponse<string>
+    {
+
+    }
 }
