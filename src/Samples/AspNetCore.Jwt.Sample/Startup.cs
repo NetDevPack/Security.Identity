@@ -25,12 +25,13 @@ namespace AspNetCore.Jwt.Sample
             // When you just want the default configuration
             //services.AddDefaultIdentityConfiguration(Configuration);    
 
+
             // When you have specifics configurations (see inside this method)
             //services.AddCustomIdentityConfiguration(Configuration);
 
             // When you have specifics configurations (with Key type [see inside this method])
             services.AddCustomIdentityAndKeyConfiguration(Configuration);
-            
+
             // Setting the interactive AspNetUser (logged in)
             services.AddAspNetUserConfiguration();
 
