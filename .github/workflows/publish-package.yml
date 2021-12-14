@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 env:
-  PACKAGE_MAJOR_VERSION: 5
+  PACKAGE_MAJOR_VERSION: 6
   PACKAGE_MINOR_VERSION: 0
   CURRENT_REPO_URL: https://github.com/${{ github.repository }}
 
