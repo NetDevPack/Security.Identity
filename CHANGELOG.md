@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/NetDevPack/Security.Identity/compare/v6.0.0...v6.0.1) (2022-02-27)
+
+
+### Bug Fixes
+
+* force v6 ([c5ec778](https://github.com/NetDevPack/Security.Identity/commit/c5ec778bac196c69cffb1d94c6a6af2c7fc7d666))
+
 # [2.0.0](https://github.com/NetDevPack/Security.Identity/compare/v1.2.0...v2.0.0) (2022-02-27)
 
 
