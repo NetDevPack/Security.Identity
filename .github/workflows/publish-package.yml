@@ -22,6 +22,11 @@ jobs:
         with:
           dotnet-version: 6.0.x        
 
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
       - name: Setup .NET 5
         uses: actions/setup-dotnet@v1
         with:
@@ -32,11 +37,20 @@ jobs:
         with:
           dotnet-version: 3.1.x
 
-      - name: Generate version
-        run: echo "PACKAGE_VERSION=$PACKAGE_MAJOR_VERSION.$PACKAGE_MINOR_VERSION.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          semantic_version: 18.0.1
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/github
+            @semantic-release/git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Package
-        run: dotnet pack -c Release -o out -p:PackageVersion=${{env.PACKAGE_VERSION}} -p:RepositoryUrl=${{env.CURRENT_REPO_URL}}
+        run: dotnet pack -c Release -o out -p:PackageVersion=${{ steps.semantic.outputs.new_release_version }} -p:RepositoryUrl=${{env.CURRENT_REPO_URL}}
 
       - name: Publish the package to nuget.org
         run: dotnet nuget push ./out/*.nupkg --skip-duplicate --no-symbols true -k ${{ secrets.NUGET_AUTH_TOKEN}} -s https://api.nuget.org/v3/index.json
