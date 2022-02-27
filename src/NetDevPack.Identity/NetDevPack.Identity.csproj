@@ -40,6 +40,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
   </ItemGroup>
 
+  <Target Name="CopyHook" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' ">
+    <ItemGroup>
+      <_CustomFiles Include="../../.github/hooks/commit-msg" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CustomFiles)" DestinationFolder="../../.git/hooks" />
+  </Target>
 
   <ItemGroup>
     <None Include="..\..\assets\IconNuget.png">
