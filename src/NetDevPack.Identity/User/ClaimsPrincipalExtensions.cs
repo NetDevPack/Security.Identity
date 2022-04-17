@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace NetDevPack.Identity.User
@@ -12,7 +13,10 @@ namespace NetDevPack.Identity.User
                 throw new ArgumentException(nameof(principal));
             }
 
-            var claim = principal.FindFirst(ClaimTypes.NameIdentifier);
+            var claim = principal.FindFirst(JwtRegisteredClaimNames.Sub);
+            if (claim is null)
+                claim = principal.FindFirst(ClaimTypes.NameIdentifier);
+
             return claim?.Value;
         }
 
@@ -22,8 +26,36 @@ namespace NetDevPack.Identity.User
             {
                 throw new ArgumentException(nameof(principal));
             }
+            var claim = principal.FindFirst(JwtRegisteredClaimNames.Sub);
+            if (claim is null)
+                claim = principal.FindFirst(ClaimTypes.Email);
 
-            var claim = principal.FindFirst(ClaimTypes.Email);
+            return claim?.Value;
+        }
+        public static string GetUserId(this ClaimsIdentity principal)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentException(nameof(principal));
+            }
+
+            var claim = principal.FindFirst(JwtRegisteredClaimNames.Sub);
+            if (claim is null)
+                claim = principal.FindFirst(ClaimTypes.NameIdentifier);
+
+            return claim?.Value;
+        }
+
+        public static string GetUserEmail(this ClaimsIdentity principal)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentException(nameof(principal));
+            }
+            var claim = principal.FindFirst(JwtRegisteredClaimNames.Sub);
+            if (claim is null)
+                claim = principal.FindFirst(ClaimTypes.Email);
+
             return claim?.Value;
         }
     }

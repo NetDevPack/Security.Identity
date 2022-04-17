@@ -10,11 +10,11 @@ namespace AspNetCore.Jwt.Sample.Config
 {
     public static class CustomIdentityAndKeyConfig
     {
-        public static void AddCustomIdentityAndKeyConfiguration(this IServiceCollection services, IConfiguration configuration) 
+        public static void AddCustomIdentityAndKeyConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+
             // Your own EF Identity configuration - Use when you have another database like postgres
-            services.AddDbContext<MyIntIdentityContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("CustomKeyConnection")));
+            services.AddDbContext<MyIntIdentityContext>(options => options.UseInMemoryDatabase("NetDevPack.Identity"));
 
             // Your own Identity configuration
             services.AddCustomIdentity<MyIntIdentityUser, int>(options =>
