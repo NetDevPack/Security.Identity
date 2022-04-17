@@ -1,3 +1,10 @@
+## [6.1.5](https://github.com/NetDevPack/Security.Identity/compare/v6.1.4...v6.1.5) (2022-04-17)
+
+
+### Bug Fixes
+
+* symetric validation ([6e0dea3](https://github.com/NetDevPack/Security.Identity/commit/6e0dea3c38d7ff71411a6ae0b87fd6fd9e995cf5))
+
 ## [6.1.4](https://github.com/NetDevPack/Security.Identity/compare/v6.1.3...v6.1.4) (2022-04-17)
 
 
