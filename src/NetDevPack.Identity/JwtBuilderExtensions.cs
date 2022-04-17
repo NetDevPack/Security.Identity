@@ -34,7 +34,8 @@ public static class JwtBuilderExtensions
     {
         if (services == null) throw new ArgumentException(nameof(services));
         services.UseNetDevPackIdentity();
-        return services.AddDefaultIdentity<IdentityUser>()
+
+        return services.AddIdentityCore<IdentityUser>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<NetDevPackAppDbContext>()
             .AddDefaultTokenProviders();
@@ -44,7 +45,8 @@ public static class JwtBuilderExtensions
     {
         if (services == null) throw new ArgumentException(nameof(services));
         services.UseNetDevPackIdentity<IdentityUser>();
-        return services.AddDefaultIdentity<IdentityUser>(options);
+        return services.AddIdentityCore<IdentityUser>(options)
+            .AddDefaultTokenProviders();
     }
 
     public static IdentityBuilder AddCustomIdentity<TIdentityUser>(this IServiceCollection services, Action<IdentityOptions> options = null)
@@ -52,7 +54,8 @@ public static class JwtBuilderExtensions
     {
         if (services == null) throw new ArgumentException(nameof(services));
 
-        return services.AddDefaultIdentity<TIdentityUser>(options);
+        return services.AddIdentityCore<TIdentityUser>(options)
+            .AddDefaultTokenProviders();
     }
 
     public static IdentityBuilder AddCustomIdentity<TIdentityUser, TKey>(this IServiceCollection services, Action<IdentityOptions> options = null)
@@ -61,7 +64,8 @@ public static class JwtBuilderExtensions
     {
         if (services == null) throw new ArgumentException(nameof(services));
         services.UseNetDevPackIdentity<TIdentityUser, TKey>();
-        return services.AddDefaultIdentity<TIdentityUser>(options);
+        return services.AddIdentityCore<TIdentityUser>(options)
+            .AddDefaultTokenProviders();
     }
 
     public static IdentityBuilder AddDefaultRoles(this IdentityBuilder builder)
