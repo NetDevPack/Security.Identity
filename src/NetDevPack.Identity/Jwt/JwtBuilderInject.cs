@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -25,6 +26,7 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
     private readonly UserManager<TIdentityUser> _userManager;
     private readonly IOptions<AppJwtSettings> _settings;
     private readonly IJwtService _jwtService;
+    private readonly IHttpContextAccessor _httpContext;
 
     private ICollection<Claim> _userClaims;
     private ICollection<Claim> _jwtClaims;
@@ -43,11 +45,16 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
     private bool _useDefaultJwtClaims;
     private TIdentityUser _user;
 
-    public JwtBuilderInject(UserManager<TIdentityUser> userManager, IOptions<AppJwtSettings> settings, IJwtService jwtService)
+    public JwtBuilderInject(
+        UserManager<TIdentityUser> userManager, 
+        IOptions<AppJwtSettings> settings, 
+        IJwtService jwtService, 
+        IHttpContextAccessor httpContext)
     {
         _userManager = userManager;
         _settings = settings;
         _jwtService = jwtService;
+        _httpContext = httpContext;
         _userClaims = new List<Claim>();
         _jwtClaims = new List<Claim>();
         _identityClaims = new ClaimsIdentity();
@@ -128,9 +135,13 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
 
         var handler = new JwtSecurityTokenHandler();
 
+        var issuer = _settings.Value.Issuer;
+        if (string.IsNullOrEmpty(issuer))
+            issuer = $"{_httpContext.HttpContext.Request.Scheme}://{_httpContext.HttpContext.Request.Host}";
+
         var securityToken = handler.CreateToken(new SecurityTokenDescriptor
         {
-            Issuer = _settings.Value.Issuer,
+            Issuer = issuer,
             Audience = _settings.Value.Audience,
             SigningCredentials = key,
             Subject = identityClaims,
@@ -185,10 +196,13 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
             _identityClaims.AddClaims(_userClaims);
         }
 
+        var issuer = _settings.Value.Issuer;
+        if (string.IsNullOrEmpty(issuer))
+            issuer = $"{_httpContext.HttpContext.Request.Scheme}://{_httpContext.HttpContext.Request.Host}";
 
         var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
         {
-            Issuer = _settings.Value.Issuer,
+            Issuer = issuer,
             Audience = _settings.Value.Audience,
             Subject = _identityClaims,
             Expires = DateTime.UtcNow.AddHours(_settings.Value.Expiration),

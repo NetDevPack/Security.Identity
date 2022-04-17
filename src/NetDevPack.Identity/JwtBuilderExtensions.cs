@@ -17,17 +17,17 @@ public static class JwtBuilderExtensions
     public static IJwksBuilder UseNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services) where TIdentityUser : IdentityUser<TKey> where TKey : IEquatable<TKey>
     {
         services.TryAddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, TKey>>();
-        return services.AddJwksManager();
+        return services.AddHttpContextAccessor().AddJwksManager();
     }
     public static IJwksBuilder UseNetDevPackIdentity<TIdentityUser>(this IServiceCollection services) where TIdentityUser : IdentityUser
     {
         services.TryAddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, string>>();
-        return services.AddJwksManager();
+        return services.AddHttpContextAccessor().AddJwksManager();
     }
     public static IJwksBuilder UseNetDevPackIdentity(this IServiceCollection services)
     {
         services.TryAddScoped<IJwtBuilder, JwtBuilderInject<IdentityUser, string>>();
-        return services.AddJwksManager();
+        return services.AddHttpContextAccessor().AddJwksManager();
     }
 
     public static IdentityBuilder AddIdentityConfiguration(this IServiceCollection services)

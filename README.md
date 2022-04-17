@@ -80,7 +80,6 @@ Set your `appsettings.json` file with this values:
 
 ```json
 "AppJwtSettings": {
-    "Issuer": "https://my-application.com",
     "Audience": "MyApplication.Name"
 }
 ``` 
@@ -89,9 +88,10 @@ It's possible to configure some aspects of token
 |Key|Meaning|Default
 |--|--|---|
 |Expiration| Expiration time (in hours)  | 1 |
-|Issuer| The name of the JWT issuer  | NetDevPack.Identity |
-|Audience| The domain that the JWT will be valid | Api |
+|Issuer| The party that "created" the token and signed it with its private key. Usually the application Url  | Get current root Url from `HttpContext` |
+|Audience| API's that should accept the token. E.g your application Main name. | NetDevPack |
 |RefreshTokenExpiration  | Refresh token expiration (In Days) | 30 |
+|RefreshTokenType  | `OneTime` or `ReUse` | 30 |
 |SecretKey `Deprecated`  | Is your key to build JWT. **Read notes**| Do not use it |
 
 >**Note:** Now we are using [NetDevPack.Security.Jwt](https://github.com/NetDevPack/Security.Jwt) to generate and Store your keys. It generate a RSA 2048 by default. You can check the project for more info.
