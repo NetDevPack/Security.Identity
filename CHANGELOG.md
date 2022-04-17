@@ -1,3 +1,15 @@
+# [6.1.0](https://github.com/NetDevPack/Security.Identity/compare/v6.0.1...v6.1.0) (2022-04-17)
+
+
+### Bug Fixes
+
+* message lenght ([ec6a841](https://github.com/NetDevPack/Security.Identity/commit/ec6a841fa44331f3f9b5777d7f17a2a07bef958b))
+
+
+### Features
+
+* **security:** Now it uses NetDevPack.Security.Jwt ([9427db1](https://github.com/NetDevPack/Security.Identity/commit/9427db111753a8830226e4be1023ed565e006c89))
+
 ## [6.0.1](https://github.com/NetDevPack/Security.Identity/compare/v6.0.0...v6.0.1) (2022-02-27)
 
 
