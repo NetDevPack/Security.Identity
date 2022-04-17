@@ -10,7 +10,7 @@ namespace NetDevPack.Identity.Jwt
 {
     public static class Abstractions
     {
-        public static IJwksBuilder AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration, string appJwtSettingsKey = "AppJwtSettings")
+        public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration, string appJwtSettingsKey = "AppJwtSettings")
         {
             if (services == null) throw new ArgumentException(nameof(services));
             if (configuration == null) throw new ArgumentException(nameof(configuration));
@@ -39,9 +39,10 @@ namespace NetDevPack.Identity.Jwt
                     };
                 });
                 services.AddDataProtection();
+                services.AddJwksManager().UseJwtValidation();
             }
 
-            return services.AddJwksManager().UseJwtValidation();
+            return services;
         }
 
         private static void SymetricKeyConfiguration(IServiceCollection services, AppJwtSettings appSettings)

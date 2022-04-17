@@ -14,26 +14,29 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class JwtBuilderExtensions
 {
-    public static IJwksBuilder UseNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services) where TIdentityUser : IdentityUser<TKey> where TKey : IEquatable<TKey>
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services) where TIdentityUser : IdentityUser<TKey> where TKey : IEquatable<TKey>
     {
-        services.TryAddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, TKey>>();
+        services.AddDataProtection();
+        services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, TKey>>();
         return services.AddHttpContextAccessor().AddJwksManager();
     }
-    public static IJwksBuilder UseNetDevPackIdentity<TIdentityUser>(this IServiceCollection services) where TIdentityUser : IdentityUser
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser>(this IServiceCollection services) where TIdentityUser : IdentityUser
     {
-        services.TryAddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, string>>();
+        services.AddDataProtection();
+        services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, string>>();
         return services.AddHttpContextAccessor().AddJwksManager();
     }
-    public static IJwksBuilder UseNetDevPackIdentity(this IServiceCollection services)
+    public static IJwksBuilder AddNetDevPackIdentity(this IServiceCollection services)
     {
-        services.TryAddScoped<IJwtBuilder, JwtBuilderInject<IdentityUser, string>>();
+        services.AddDataProtection();
+        services.AddScoped<IJwtBuilder, JwtBuilderInject<IdentityUser, string>>();
         return services.AddHttpContextAccessor().AddJwksManager();
     }
-
+    
     public static IdentityBuilder AddIdentityConfiguration(this IServiceCollection services)
     {
         if (services == null) throw new ArgumentException(nameof(services));
-        services.UseNetDevPackIdentity();
+        services.AddNetDevPackIdentity();
 
         return services.AddIdentityCore<IdentityUser>()
             .AddRoles<IdentityRole>()
@@ -44,7 +47,7 @@ public static class JwtBuilderExtensions
     public static IdentityBuilder AddDefaultIdentity(this IServiceCollection services, Action<IdentityOptions> options = null)
     {
         if (services == null) throw new ArgumentException(nameof(services));
-        services.UseNetDevPackIdentity<IdentityUser>();
+        services.AddNetDevPackIdentity<IdentityUser>();
         return services.AddIdentityCore<IdentityUser>(options)
             .AddDefaultTokenProviders();
     }
@@ -63,7 +66,7 @@ public static class JwtBuilderExtensions
         where TKey : IEquatable<TKey>
     {
         if (services == null) throw new ArgumentException(nameof(services));
-        services.UseNetDevPackIdentity<TIdentityUser, TKey>();
+        services.AddNetDevPackIdentity<TIdentityUser, TKey>();
         return services.AddIdentityCore<TIdentityUser>(options)
             .AddDefaultTokenProviders();
     }
