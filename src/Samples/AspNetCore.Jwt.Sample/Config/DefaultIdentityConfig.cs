@@ -17,7 +17,7 @@ namespace AspNetCore.Jwt.Sample.Config
             services.AddIdentityConfiguration();  // <== This extension returns IdentityBuilder to extends configuration
 
             // Default JWT configuration
-            services.AddJwtConfiguration(configuration, "AppSettings");
+            services.AddJwtConfiguration(configuration);
         }
     }
 }

@@ -76,17 +76,15 @@ If you want to generate JSON Web Tokens in your application you need to add the 
 services.AddJwtConfiguration(Configuration).UseNetDevPackIdentity();;
 ```
 
->**Note:** If you don't inform the configuration name the value adopted will be _AppJwtSettings_
-
 Set your `appsettings.json` file with this values:
 
 ```json
 "AppJwtSettings": {
-    "Expiration": 1,
     "Issuer": "https://my-application.com",
     "Audience": "MyApplication.Name"
 }
 ``` 
+It's possible to configure some aspects of token
 
 |Key|Meaning|Default
 |--|--|---|
