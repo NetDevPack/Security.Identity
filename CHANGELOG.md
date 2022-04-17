@@ -1,3 +1,10 @@
+## [6.1.3](https://github.com/NetDevPack/Security.Identity/compare/v6.1.2...v6.1.3) (2022-04-17)
+
+
+### Bug Fixes
+
+* Issuer default value from HttpContext ([9fd3425](https://github.com/NetDevPack/Security.Identity/commit/9fd3425e5cc1f4597d4f94330367b9c001dfb6a2))
+
 ## [6.1.2](https://github.com/NetDevPack/Security.Identity/compare/v6.1.1...v6.1.2) (2022-04-17)
 
 
