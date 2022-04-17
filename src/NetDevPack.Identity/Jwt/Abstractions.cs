@@ -4,14 +4,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NetDevPack.Security.Jwt.AspNetCore;
-using NetDevPack.Security.Jwt.Core;
+using NetDevPack.Security.Jwt.Core.Interfaces;
 
 namespace NetDevPack.Identity.Jwt
 {
     public static class Abstractions
     {
-        public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration, string appJwtSettingsKey = "AppJwtSettings")
+        public static IJwksBuilder AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration, string appJwtSettingsKey = "AppJwtSettings")
         {
             if (services == null) throw new ArgumentException(nameof(services));
             if (configuration == null) throw new ArgumentException(nameof(configuration));
@@ -40,10 +39,9 @@ namespace NetDevPack.Identity.Jwt
                     };
                 });
                 services.AddDataProtection();
-                services.AddJwksManager().UseJwtValidation();
             }
 
-            return services;
+            return services.AddJwksManager().UseJwtValidation();
         }
 
         private static void SymetricKeyConfiguration(IServiceCollection services, AppJwtSettings appSettings)
