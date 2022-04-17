@@ -1,3 +1,10 @@
+## [6.1.2](https://github.com/NetDevPack/Security.Identity/compare/v6.1.1...v6.1.2) (2022-04-17)
+
+
+### Bug Fixes
+
+* Remove unused dependencies ([bf68ee3](https://github.com/NetDevPack/Security.Identity/commit/bf68ee3dae54a31370151c1b2662d0e1634a6cbe))
+
 ## [6.1.1](https://github.com/NetDevPack/Security.Identity/compare/v6.1.0...v6.1.1) (2022-04-17)
 
 
