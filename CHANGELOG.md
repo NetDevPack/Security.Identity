@@ -1,3 +1,11 @@
+## [6.1.4](https://github.com/NetDevPack/Security.Identity/compare/v6.1.3...v6.1.4) (2022-04-17)
+
+
+### Bug Fixes
+
+* configuration settings ([a6050c0](https://github.com/NetDevPack/Security.Identity/commit/a6050c0f0e97c4cc2bbc7b3ebb69e8df71cad020))
+* latest package versions ([5f7426c](https://github.com/NetDevPack/Security.Identity/commit/5f7426ce86c6f1540560ac6e2eb66154ea576e17))
+
 ## [6.1.3](https://github.com/NetDevPack/Security.Identity/compare/v6.1.2...v6.1.3) (2022-04-17)
 
 
