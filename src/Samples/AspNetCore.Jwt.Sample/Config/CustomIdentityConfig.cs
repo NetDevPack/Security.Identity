@@ -13,8 +13,7 @@ namespace AspNetCore.Jwt.Sample.Config
         public static void AddCustomIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             // Your own EF Identity configuration - Use when you have another database like postgres
-            services.AddDbContext<MyIdentityContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("CustomConnection")));
+            services.AddDbContext<MyIdentityContext>(options => options.UseInMemoryDatabase("NetDevPack.Identity"));
 
             // Your own Identity configuration
             services.AddCustomIdentity<MyIdentityUser>(options =>
@@ -27,7 +26,7 @@ namespace AspNetCore.Jwt.Sample.Config
                 .AddDefaultTokenProviders();
 
             // Ours JWT configuration
-            services.AddJwtConfiguration(configuration, "AppSettings");
+            services.AddJwtConfiguration(configuration);
         }
     }
 

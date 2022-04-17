@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NetDevPack.Identity.Interfaces;
 using NetDevPack.Identity.Jwt;
 using NetDevPack.Identity.Jwt.Model;
 using NetDevPack.Identity.Model;
@@ -13,15 +14,16 @@ namespace AspNetCore.Jwt.Sample.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IJwtBuilder _jwtBuilder;
         private readonly AppJwtSettings _appJwtSettings;
 
         public AuthController(SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            IOptions<AppJwtSettings> appJwtSettings)
+            IJwtBuilder jwtBuilder)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _appJwtSettings = appJwtSettings.Value;
+            _jwtBuilder = jwtBuilder;
         }
 
         [HttpPost("register")]
@@ -61,11 +63,11 @@ namespace AspNetCore.Jwt.Sample.Controllers
             if (result.Succeeded)
             {
                 /* ANOTHER OPTIONS */
-                var userResponse = GetUserResponse(loginUser.Email);
-                var jwtUserClaims = GetJwtWithUserClaims(loginUser.Email);
-                var jwtNoClaims = GetJwtWithoutClaims(loginUser.Email);
+                var userResponse = await GetUserResponse(loginUser.Email);
+                var jwtUserClaims = await GetJwtWithUserClaims(loginUser.Email);
+                var jwtNoClaims = await GetJwtWithoutClaims(loginUser.Email);
 
-                var fullJwt = GetFullJwt(loginUser.Email);
+                var fullJwt = await GetFullJwt(loginUser.Email);
                 return CustomResponse(fullJwt);
             }
 
@@ -79,46 +81,63 @@ namespace AspNetCore.Jwt.Sample.Controllers
             return CustomResponse();
         }
 
-        private UserResponse GetUserResponse(string email)
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult> RefreshToken([FromForm] string refreshToken)
         {
-            return new JwtBuilder()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            var tokenValidation = await _jwtBuilder.ValidateRefreshToken(refreshToken);
+
+            if (!tokenValidation)
+            {
+                ModelState.AddModelError("RefreshToken", "Expired token");
+                return BadRequest(ModelState);
+            }
+
+            return CustomResponse(await _jwtBuilder
+                .WithUserId(tokenValidation.UserId)
+                .WithJwtClaims()
+                .WithUserClaims()
+                .WithUserRoles()
+                .WithRefreshToken()
+                .BuildToken());
+
+        }
+        private Task<UserResponse> GetUserResponse(string email)
+        {
+            return _jwtBuilder
                 .WithEmail(email)
                 .WithJwtClaims()
                 .WithUserClaims()
                 .WithUserRoles()
-                .BuildUserResponse() as UserResponse;
+                .WithRefreshToken()
+                .BuildUserResponse();
         }
 
-        private string GetFullJwt(string email)
+        private Task<string> GetFullJwt(string email)
         {
-            return new JwtBuilder()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
                 .WithJwtClaims()
                 .WithUserClaims()
                 .WithUserRoles()
+                .WithRefreshToken()
                 .BuildToken();
         }
 
-        private string GetJwtWithoutClaims(string email)
+        private Task<string> GetJwtWithoutClaims(string email)
         {
-            return new JwtBuilder()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
+                .WithRefreshToken()
                 .BuildToken();
         }
 
-        private string GetJwtWithUserClaims(string email)
+        private Task<string> GetJwtWithUserClaims(string email)
         {
-            return new JwtBuilder()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
                 .WithUserClaims()
+                .WithRefreshToken()
                 .BuildToken();
         }
     }

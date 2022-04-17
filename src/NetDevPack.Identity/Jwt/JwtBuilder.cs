@@ -10,9 +10,8 @@ using NetDevPack.Identity.Jwt.Model;
 
 namespace NetDevPack.Identity.Jwt
 {
-    public class JwtBuilder<TIdentityUser, TKey> 
-        where TIdentityUser : IdentityUser<TKey>
-        where TKey : IEquatable<TKey>
+    [Obsolete("Inject IJwtBuilder instead")]
+    public class JwtBuilder<TIdentityUser, TKey> where TIdentityUser : IdentityUser<TKey>  where TKey : IEquatable<TKey>
     {
         private UserManager<TIdentityUser> _userManager;
         private AppJwtSettings _appJwtSettings;
@@ -73,7 +72,7 @@ namespace NetDevPack.Identity.Jwt
 
             return this;
         }
-
+        
         public string BuildToken()
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -91,13 +90,13 @@ namespace NetDevPack.Identity.Jwt
             return tokenHandler.WriteToken(token);
         }
 
-        public UserResponse<TKey> BuildUserResponse()
+        public UserResponse BuildUserResponse()
         {
-            var user = new UserResponse<TKey>
+            var user = new UserResponse
             {
                 AccessToken = BuildToken(),
                 ExpiresIn = TimeSpan.FromHours(_appJwtSettings.Expiration).TotalSeconds,
-                UserToken = new UserToken<TKey>
+                UserToken = new UserToken
                 {
                     Id = _user.Id,
                     Email = _user.Email,

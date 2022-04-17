@@ -11,15 +11,13 @@ namespace AspNetCore.Jwt.Sample.Config
         public static void AddDefaultIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             // Default EF Context for Identity (inside of the NetDevPack.Identity)
-            services.AddIdentityEntityFrameworkContextConfiguration(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
-                    b=>b.MigrationsAssembly("AspNetCore.Jwt.Sample")));
+            services.AddIdentityEntityFrameworkContextConfiguration(options => options.UseInMemoryDatabase("NetDevPack.Identity"));
             
             // Default Identity configuration
             services.AddIdentityConfiguration();  // <== This extension returns IdentityBuilder to extends configuration
 
             // Default JWT configuration
-            services.AddJwtConfiguration(configuration, "AppSettings");
+            services.AddJwtConfiguration(configuration);
         }
     }
 }

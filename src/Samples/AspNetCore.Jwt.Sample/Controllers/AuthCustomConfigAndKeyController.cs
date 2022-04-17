@@ -1,11 +1,14 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.Jwt.Sample.Config;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NetDevPack.Identity.Interfaces;
 using NetDevPack.Identity.Jwt;
 using NetDevPack.Identity.Jwt.Model;
 using NetDevPack.Identity.Model;
+using NetDevPack.Identity.User;
 
 namespace AspNetCore.Jwt.Sample.Controllers
 {
@@ -14,15 +17,15 @@ namespace AspNetCore.Jwt.Sample.Controllers
     {
         private readonly SignInManager<MyIntIdentityUser> _signInManager;
         private readonly UserManager<MyIntIdentityUser> _userManager;
-        private readonly AppJwtSettings _appJwtSettings;
+        private readonly IJwtBuilder _jwtBuilder;
 
         public AuthCustomConfigAndKeyController(SignInManager<MyIntIdentityUser> signInManager,
             UserManager<MyIntIdentityUser> userManager,
-            IOptions<AppJwtSettings> appJwtSettings)
+            IJwtBuilder jwtBuilder)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _appJwtSettings = appJwtSettings.Value;
+            _jwtBuilder = jwtBuilder;
         }
 
         [HttpPost("register")]
@@ -41,7 +44,7 @@ namespace AspNetCore.Jwt.Sample.Controllers
 
             if (result.Succeeded)
             {
-                return CustomResponse(GetUserResponse(user.Email));
+                return CustomResponse(await GetUserResponse(user.Email));
             }
 
             foreach (var error in result.Errors)
@@ -80,47 +83,64 @@ namespace AspNetCore.Jwt.Sample.Controllers
             return CustomResponse();
         }
 
-        private UserResponse<int> GetUserResponse(string email)
+        private Task<UserResponse> GetUserResponse(string email)
         {
-            return new JwtBuilder<MyIntIdentityUser, int>()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
                 .WithJwtClaims()
                 .WithUserClaims()
                 .WithUserRoles()
+                .WithRefreshToken()
                 .BuildUserResponse();
         }
 
-        private string GetFullJwt(string email)
+        private Task<string> GetFullJwt(string email)
         {
-            return new JwtBuilder<MyIntIdentityUser, int>()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
                 .WithJwtClaims()
                 .WithUserClaims()
                 .WithUserRoles()
+                .WithRefreshToken()
                 .BuildToken();
         }
 
-        private string GetJwtWithoutClaims(string email)
+        private Task<string> GetJwtWithoutClaims(string email)
         {
-            return new JwtBuilder<MyIntIdentityUser, int>()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
+                .WithRefreshToken()
                 .BuildToken();
         }
 
-        private string GetJwtWithUserClaims(string email)
+        private Task<string> GetJwtWithUserClaims(string email)
         {
-            return new JwtBuilder<MyIntIdentityUser, int>()
-                .WithUserManager(_userManager)
-                .WithJwtSettings(_appJwtSettings)
+            return _jwtBuilder
                 .WithEmail(email)
                 .WithUserClaims()
+                .WithRefreshToken()
                 .BuildToken();
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult> RefreshToken([FromForm] string refreshToken)
+        {
+            var tokenValidation = await _jwtBuilder.ValidateRefreshToken(refreshToken);
+
+            if (!tokenValidation)
+            {
+                ModelState.AddModelError("RefreshToken", "Expired token");
+                return BadRequest(ModelState);
+            }
+
+            return CustomResponse(await _jwtBuilder
+                .WithUserId(tokenValidation.UserId)
+                .WithJwtClaims()
+                .WithUserClaims()
+                .WithUserRoles()
+                .WithRefreshToken()
+                .BuildUserResponse());
+
         }
     }
 }

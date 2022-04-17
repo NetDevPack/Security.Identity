@@ -73,59 +73,46 @@ After execute this steps you will be all set to use the Identity in your Applica
 ### Configuring JWT
 If you want to generate JSON Web Tokens in your application you need to add the JWT configuration in `ConfigureServices` method of your `startup.cs`
 ```csharp
-services.AddJwtConfiguration(Configuration, "AppSettings");
+services.AddJwtConfiguration(Configuration).UseNetDevPackIdentity();;
 ```
-
->**Note:** If you don't inform the configuration name the value adopted will be _AppJwtSettings_
-
 
 Set your `appsettings.json` file with this values:
 
 ```json
-"AppSettings": {
-    "SecretKey": "MYSECRETSUPERSECRET",
-    "Expiration": 2,
-    "Issuer": "SampleApp",
-    "Audience": "https://localhost"
+"AppJwtSettings": {
+    "Issuer": "https://my-application.com",
+    "Audience": "MyApplication.Name"
 }
 ``` 
+It's possible to configure some aspects of token
 
-|Key|Meaning|
-|--|--|
-|SecretKey  | Is your key to build JWT. This value need to be stored in a safe place in the production way |
-|Expiration| Expiration time in hours  |
-|Issuer| The name of the JWT issuer  |
-|Audience| The domain that the JWT will be valid. Can be a string collection  |
+|Key|Meaning|Default
+|--|--|---|
+|Expiration| Expiration time (in hours)  | 1 |
+|Issuer| The name of the JWT issuer  | NetDevPack.Identity |
+|Audience| The domain that the JWT will be valid | Api |
+|RefreshTokenExpiration  | Refresh token expiration (In Days) | 30 |
+|SecretKey `Deprecated`  | Is your key to build JWT. **Read notes**| Do not use it |
+
+>**Note:** Now we are using [NetDevPack.Security.Jwt](https://github.com/NetDevPack/Security.Jwt) to generate and Store your keys. It generate a RSA 2048 by default. You can check the project for more info.
 
 ### Generating JWT
-You will need to set some dependencies in your Authentication Controller:
+You will need to set a single dependency in your Authentication Controller:
 
 ```csharp
-private readonly SignInManager<IdentityUser> _signInManager;
-private readonly UserManager<IdentityUser> _userManager;
-private readonly AppJwtSettings _appJwtSettings;
 
-public AuthController(SignInManager<IdentityUser> signInManager,
-		      UserManager<IdentityUser> userManager,
-		      IOptions<AppJwtSettings> appJwtSettings)
+public AuthController(IJwtBuilder jwtBuilder)
 {
-    _signInManager = signInManager;
-    _userManager = userManager;
-    _appJwtSettings = appJwtSettings.Value;
+    _jwtBuilder = jwtBuilder;
 }
 ```
-
->**Note:** The _AppJwtSettings_ is our dependency and is configured internally during JWT setup (in `startup.cs` file). You just need to inject it in your controller.
->
->**Note:** The _SignInManager_ and _UserManager_ classes is native from Identity and provided in NetDevPack.Identity. You just need to inject it in your controller.
 
 After user register or login process you can generate a JWT to respond the request. Use our implementation, you just need inform the user email and the dependencies injected in your controller:
 
 ```csharp
-return new JwtBuilder()
-	.WithUserManager(_userManager)
-	.WithJwtSettings(_appJwtSettings)
+return _jwtBuilder
 	.WithEmail(email)
+    .WithRefreshToken()
 	.BuildToken();
 ```
 
@@ -135,13 +122,12 @@ return new JwtBuilder()
 You can call more methods in `JwtBuilder` to provide more information about the user:
 
 ```csharp
-return new JwtBuilder()
-    .WithUserManager(_userManager)
-    .WithJwtSettings(_appJwtSettings)
+return _jwtBuilder
     .WithEmail(email)
     .WithJwtClaims()
     .WithUserClaims()
     .WithUserRoles()
+    .WithRefreshToken()
     .BuildToken();
 ```
 
@@ -155,23 +141,20 @@ return new JwtBuilder()
 If you want return your complex object `UserResponse` you need to change the last method to:
 
 ```csharp
-return new JwtBuilder()
-    .WithUserManager(_userManager)
-    .WithJwtSettings(_appJwtSettings)
+return _jwtBuilder
     .WithEmail(email)
     .WithJwtClaims()
     .WithUserClaims()
     .WithUserRoles()
-    .BuildUserResponse() as UserResponse;
+    .WithRefreshToken()
+    .BuildUserResponse();
 ```
-
->**Note:** The safe cast to `UserResponse` is needed because is a subtype of `UserResponse<TKey>`.
 
 ## Examples
 Use the [sample application](https://github.com/NetDevPack/NetDevPack.Identity/tree/master/src/Samples/AspNetCore.Jwt.Sample) to understand how NetDevPack.Identity can be implemented and help you to decrease the complexity of your application and development time.
 
 ## Compatibility
-The **NetDevPack.Identity** was developed to be implemented in **ASP.NET Core 3.1** `LTS` applications, in the next versions will be add the 2.1 `LTS` support.
+The **NetDevPack.Identity** was developed to be implemented in **ASP.NET Core**. It support all .NET versions since 3.1.
 
 ## About
 .NET DevPack.Identity was developed by [Eduardo Pires](http://eduardopires.net.br) under the [MIT license](LICENSE).
