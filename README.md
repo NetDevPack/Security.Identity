@@ -73,7 +73,8 @@ After execute this steps you will be all set to use the Identity in your Applica
 ### Configuring JWT
 If you want to generate JSON Web Tokens in your application you need to add the JWT configuration in `ConfigureServices` method of your `startup.cs`
 ```csharp
-services.AddJwtConfiguration(Configuration);
+services.AddJwtConfiguration(Configuration)
+        .AddNetDevPackIdentity<IdentityUser>();
 ```
 
 Set your `appsettings.json` file with this values:
