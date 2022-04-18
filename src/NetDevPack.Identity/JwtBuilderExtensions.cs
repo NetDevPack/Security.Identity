@@ -12,31 +12,57 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class JwtBuilderExtensions
 {
-    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services, Action<JwtOptions> options = null) 
-        where TIdentityUser : IdentityUser<TKey> where TKey : IEquatable<TKey>
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services, Action<JwtOptions> options = null)
+        where TIdentityUser : IdentityUser<TKey>
+        where TKey : IEquatable<TKey>
     {
-        services.AddDataProtection();
+        services.AddHttpContextAccessor();
         services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, TKey>>();
-        return services.AddHttpContextAccessor().AddJwksManager();
+        return services.AddJwksManager(options);
     }
-    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser>(this IServiceCollection services, Action<JwtOptions> options = null) 
+
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser>(this IServiceCollection services, Action<JwtOptions> options = null)
         where TIdentityUser : IdentityUser
     {
-        services.AddDataProtection();
+        services.AddHttpContextAccessor();
         services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, string>>();
-        return services.AddHttpContextAccessor().AddJwksManager();
+        return services.AddJwksManager(options);
     }
+
     public static IJwksBuilder AddNetDevPackIdentity(this IServiceCollection services, Action<JwtOptions> options = null)
     {
-        services.AddDataProtection();
+        services.AddHttpContextAccessor();
         services.AddScoped<IJwtBuilder, JwtBuilderInject<IdentityUser, string>>();
-        return services.AddHttpContextAccessor().AddJwksManager(options);
+        return services.AddJwksManager(options);
+    }
+
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser, TKey>(this IJwksBuilder services)
+        where TIdentityUser : IdentityUser<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        services.Services.AddHttpContextAccessor();
+        services.Services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, TKey>>();
+        return services;
+    }
+
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser>(this IJwksBuilder services)
+        where TIdentityUser : IdentityUser
+    {
+        services.Services.AddHttpContextAccessor();
+        services.Services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, string>>();
+        return services;
+    }
+
+    public static IJwksBuilder AddNetDevPackIdentity(this IJwksBuilder services)
+    {
+        services.Services.AddHttpContextAccessor();
+        services.Services.AddScoped<IJwtBuilder, JwtBuilderInject<IdentityUser, string>>();
+        return services;
     }
 
     public static IdentityBuilder AddIdentityConfiguration(this IServiceCollection services)
     {
         if (services == null) throw new ArgumentException(nameof(services));
-        services.AddNetDevPackIdentity();
 
         return services
                 .AddIdentity<IdentityUser, IdentityRole>()
@@ -47,7 +73,6 @@ public static class JwtBuilderExtensions
     public static IdentityBuilder AddDefaultIdentity(this IServiceCollection services, Action<IdentityOptions> options = null)
     {
         if (services == null) throw new ArgumentException(nameof(services));
-        services.AddNetDevPackIdentity<IdentityUser>();
         return services
             .AddIdentity<IdentityUser, IdentityRole>()
             .AddDefaultTokenProviders();
@@ -67,7 +92,6 @@ public static class JwtBuilderExtensions
         where TKey : IEquatable<TKey>
     {
         if (services == null) throw new ArgumentException(nameof(services));
-        services.AddNetDevPackIdentity<TIdentityUser, TKey>();
         return services.AddIdentity<TIdentityUser, IdentityRole<TKey>>(options)
             .AddDefaultTokenProviders();
     }

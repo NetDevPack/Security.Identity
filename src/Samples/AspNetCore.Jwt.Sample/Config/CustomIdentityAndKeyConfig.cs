@@ -27,7 +27,7 @@ namespace AspNetCore.Jwt.Sample.Config
                 .AddDefaultTokenProviders();
 
             // Ours JWT configuration
-            services.AddJwtConfiguration(configuration);
+            services.AddJwtConfiguration(configuration).AddNetDevPackIdentity<MyIntIdentityUser, int>();
         }
     }
 

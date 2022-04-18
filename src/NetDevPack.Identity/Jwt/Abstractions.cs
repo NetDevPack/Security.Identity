@@ -38,8 +38,6 @@ namespace NetDevPack.Identity.Jwt
                         ValidIssuer = appSettings.Issuer,
                     };
                 });
-                services.AddDataProtection();
-                services.AddJwksManager().UseJwtValidation();
             }
 
             return services;

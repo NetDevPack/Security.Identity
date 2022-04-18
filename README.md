@@ -101,7 +101,6 @@ It's possible to configure some aspects of token
 You will need to set a single dependency in your Authentication Controller:
 
 ```csharp
-
 public AuthController(IJwtBuilder jwtBuilder)
 {
     _jwtBuilder = jwtBuilder;
