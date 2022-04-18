@@ -1,3 +1,11 @@
+## [6.1.7](https://github.com/NetDevPack/Security.Identity/compare/v6.1.6...v6.1.7) (2022-04-18)
+
+
+### Bug Fixes
+
+* declarative extensions ([6c726bb](https://github.com/NetDevPack/Security.Identity/commit/6c726bb0173a69b8872bf1c1114ef60ac0475629))
+* options at extension method ([afe8269](https://github.com/NetDevPack/Security.Identity/commit/afe82691e6c19a7742701add856fcd6250a56552))
+
 ## [6.1.6](https://github.com/NetDevPack/Security.Identity/compare/v6.1.5...v6.1.6) (2022-04-17)
 
 
