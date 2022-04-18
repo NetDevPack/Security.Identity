@@ -112,7 +112,7 @@ After user register or login process you can generate a JWT to respond the reque
 ```csharp
 return _jwtBuilder
 	.WithEmail(email)
-    .WithRefreshToken()
+    	.WithRefreshToken()
 	.BuildToken();
 ```
 
