@@ -1,3 +1,10 @@
+## [6.1.6](https://github.com/NetDevPack/Security.Identity/compare/v6.1.5...v6.1.6) (2022-04-17)
+
+
+### Bug Fixes
+
+* AddIdentity instead AddIdentityCore ([5383cae](https://github.com/NetDevPack/Security.Identity/commit/5383caebdaab8fdb94fc408449f7b257535bc91f))
+
 ## [6.1.5](https://github.com/NetDevPack/Security.Identity/compare/v6.1.4...v6.1.5) (2022-04-17)
 
 
