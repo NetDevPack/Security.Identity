@@ -5,29 +5,32 @@ using Microsoft.EntityFrameworkCore;
 using NetDevPack.Identity.Data;
 using NetDevPack.Identity.Interfaces;
 using NetDevPack.Identity.Jwt;
+using NetDevPack.Security.Jwt.Core;
 using NetDevPack.Security.Jwt.Core.Interfaces;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class JwtBuilderExtensions
 {
-    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services) where TIdentityUser : IdentityUser<TKey> where TKey : IEquatable<TKey>
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser, TKey>(this IServiceCollection services, Action<JwtOptions> options = null) 
+        where TIdentityUser : IdentityUser<TKey> where TKey : IEquatable<TKey>
     {
         services.AddDataProtection();
         services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, TKey>>();
         return services.AddHttpContextAccessor().AddJwksManager();
     }
-    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser>(this IServiceCollection services) where TIdentityUser : IdentityUser
+    public static IJwksBuilder AddNetDevPackIdentity<TIdentityUser>(this IServiceCollection services, Action<JwtOptions> options = null) 
+        where TIdentityUser : IdentityUser
     {
         services.AddDataProtection();
         services.AddScoped<IJwtBuilder, JwtBuilderInject<TIdentityUser, string>>();
         return services.AddHttpContextAccessor().AddJwksManager();
     }
-    public static IJwksBuilder AddNetDevPackIdentity(this IServiceCollection services)
+    public static IJwksBuilder AddNetDevPackIdentity(this IServiceCollection services, Action<JwtOptions> options = null)
     {
         services.AddDataProtection();
         services.AddScoped<IJwtBuilder, JwtBuilderInject<IdentityUser, string>>();
-        return services.AddHttpContextAccessor().AddJwksManager();
+        return services.AddHttpContextAccessor().AddJwksManager(options);
     }
 
     public static IdentityBuilder AddIdentityConfiguration(this IServiceCollection services)
