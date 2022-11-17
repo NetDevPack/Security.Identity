@@ -1,3 +1,16 @@
+# [7.0.0](https://github.com/NetDevPack/Security.Identity/compare/v6.1.7...v7.0.0) (2022-11-17)
+
+
+### Features
+
+* net 7 ([e355161](https://github.com/NetDevPack/Security.Identity/commit/e355161c8066299efea364c78dd56c9908b074a0))
+* net7 ([062deca](https://github.com/NetDevPack/Security.Identity/commit/062decae7ab872abad55b4d1af39b6332bb5c8be))
+
+
+### BREAKING CHANGES
+
+* dotnet 7
+
 ## [6.1.7](https://github.com/NetDevPack/Security.Identity/compare/v6.1.6...v6.1.7) (2022-04-18)
 
 
