@@ -159,3 +159,6 @@ The **NetDevPack.Identity** was developed to be implemented in **ASP.NET Core**.
 ## About
 .NET DevPack.Identity was developed by [Eduardo Pires](http://eduardopires.net.br) under the [MIT license](LICENSE).
 
+
+
+.
