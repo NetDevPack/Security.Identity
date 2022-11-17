@@ -17,13 +17,13 @@ namespace AspNetCore.Jwt.Sample.Config
             services.AddDbContext<MyIntIdentityContext>(options => options.UseInMemoryDatabase("NetDevPack.Identity"));
 
             // Your own Identity configuration
-            services.AddCustomIdentity<MyIntIdentityUser, int>(options =>
+            services.AddIdentityCore<MyIntIdentityUser>(options =>
                 {
                     options.SignIn.RequireConfirmedEmail = false;
                     options.Lockout.MaxFailedAccessAttempts = 5;
                 })
-                .AddCustomRoles<MyIntIdentityRoles, int>()
-                .AddCustomEntityFrameworkStores<MyIntIdentityContext>()
+                .AddRoles<MyIntIdentityRoles>()
+                .AddEntityFrameworkStores<MyIntIdentityContext>()
                 .AddDefaultTokenProviders();
 
             // Ours JWT configuration

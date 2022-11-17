@@ -15,7 +15,9 @@ builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.De
 //builder.Services.AddCustomIdentityConfiguration(builder.Configuration);
 
 // When you have specifics configurations (with Key type [see inside this method])
-builder.Services.AddCustomIdentityAndKeyConfiguration(builder.Configuration);
+
+builder.Services.AddMemoryCache()
+                .AddCustomIdentityAndKeyConfiguration(builder.Configuration);
 
 // Setting the interactive AspNetUser (logged in)
 builder.Services.AddAspNetUserConfiguration();
