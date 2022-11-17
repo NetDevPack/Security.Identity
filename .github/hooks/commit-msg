@@ -22,7 +22,7 @@ test "" = "$(grep '^Signed-off-by: ' "$1" |
 	echo >&2 Duplicate Signed-off-by lines.
 	exit 1
 }
-if ! head -1 "$1" | grep -qE "^(feat|fix|ci|chore|docs|test|style|refactor|chk)(\(.+?\))?: .{1,}$"; then
+if ! head -1 "$1" | grep -qE "^(feat|fix|ci|chore|docs|test|style|refactor|chk)(\(.+?\))?(\!)?: .{1,}$"; then
     echo "Aborting commit. Your commit message is invalid. See some examples below:" >&2
     echo "feat(logging): added logs for failed signups" >&2
     echo "fix(homepage): fixed image gallery" >&2
