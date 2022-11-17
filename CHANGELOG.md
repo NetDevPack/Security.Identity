@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/NetDevPack/Security.Identity/compare/v7.0.0...v7.0.1) (2022-11-17)
+
+
+### Bug Fixes
+
+* sample ([297960f](https://github.com/NetDevPack/Security.Identity/commit/297960f05634f9ae825502fc267104d143ed9a24))
+
 # [7.0.0](https://github.com/NetDevPack/Security.Identity/compare/v6.1.7...v7.0.0) (2022-11-17)
 
 
