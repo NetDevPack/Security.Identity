@@ -1,3 +1,20 @@
+# [8.0.0](https://github.com/NetDevPack/Security.Identity/compare/v7.0.1...v8.0.0) (2026-02-05)
+
+
+### Bug Fixes
+
+* github action ([9160cfc](https://github.com/NetDevPack/Security.Identity/commit/9160cfc9515c60ca06383544095f0ffc5ae7853f))
+
+
+### Features
+
+* **runtime:** upgrade project to latest .NET version ([38e9b9f](https://github.com/NetDevPack/Security.Identity/commit/38e9b9f42c2866e8c9c34773ecf93de1a0ecbf7b))
+
+
+### BREAKING CHANGES
+
+* **runtime:** dropped support for non-LTS .NET versions
+
 ## [7.0.1](https://github.com/NetDevPack/Security.Identity/compare/v7.0.0...v7.0.1) (2022-11-17)
 
 
