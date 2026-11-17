@@ -267,7 +267,7 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
 
         // RequireSignedTokens is true by default: unsigned ("alg": "none") tokens are rejected.
         // ValidTypes makes sure an access token (at+jwt) can't be used as a refresh token.
-        var result = await handler.ValidateTokenAsync(refreshToken, new TokenValidationParameters()
+        var result = await handler.ValidateTokenAsync(refreshToken, new TokenValidationParameters
         {
             ValidIssuer = GetIssuer(),
             ValidAudience = _settings.Value.Audience,
