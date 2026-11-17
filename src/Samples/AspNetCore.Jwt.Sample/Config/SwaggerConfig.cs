@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace AspNetCore.Jwt.Sample.Config
 {
@@ -31,19 +31,9 @@ namespace AspNetCore.Jwt.Sample.Config
                     Type = SecuritySchemeType.ApiKey
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                 {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
+                    [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                 });
             });
         }
