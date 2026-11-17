@@ -9,11 +9,11 @@
     <Company>desenvolvedor.io</Company>
     <Description>.NET DevPack Identity is a set of common implementations to help you implementing Identity, Jwt, claims validation and another facilities</Description>
     <PackageDescription>.NET DevPack Identity is a set of common implementations to help you implementing Identity, Jwt, claims validation and another facilities</PackageDescription>
-    <PackageProjectUrl>https://github.com/NetDevPack/NetDevPack.Identity</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/NetDevPack/Security.Identity</PackageProjectUrl>
     <PackageId>NetDevPack.Identity</PackageId>
     <PackageIcon>IconNuget.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/NetDevPack/NetDevPack.Identity</RepositoryUrl>
+    <RepositoryUrl>https://github.com/NetDevPack/Security.Identity</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryBranch>master</RepositoryBranch>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
