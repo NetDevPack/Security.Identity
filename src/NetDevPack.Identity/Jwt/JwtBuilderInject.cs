@@ -39,6 +39,8 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
     private string _email;
     private string _username;
 
+    private const string RefreshTokenJwtType = "rt+jwt";
+
     private bool _useClaims;
     private bool _useRoles;
     private bool _useRt;
@@ -135,9 +137,7 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
 
         var handler = new JwtSecurityTokenHandler();
 
-        var issuer = _settings.Value.Issuer;
-        if (string.IsNullOrEmpty(issuer))
-            issuer = $"{_httpContext.HttpContext.Request.Scheme}://{_httpContext.HttpContext.Request.Host}";
+        var issuer = GetIssuer();
 
         var securityToken = handler.CreateToken(new SecurityTokenDescriptor
         {
@@ -147,7 +147,7 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
             Subject = identityClaims,
             NotBefore = DateTime.UtcNow,
             Expires = DateTime.UtcNow.AddDays(_settings.Value.RefreshTokenExpiration),
-            TokenType = "rt+jwt"
+            TokenType = RefreshTokenJwtType
         });
         await UpdateLastGeneratedClaim(jti, user);
         var encodedJwt = handler.WriteToken(securityToken);
@@ -196,9 +196,7 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
             _identityClaims.AddClaims(_userClaims);
         }
 
-        var issuer = _settings.Value.Issuer;
-        if (string.IsNullOrEmpty(issuer))
-            issuer = $"{_httpContext.HttpContext.Request.Scheme}://{_httpContext.HttpContext.Request.Host}";
+        var issuer = GetIssuer();
 
         var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
         {
@@ -262,21 +260,29 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
 
     public async Task<RefreshTokenValidation> ValidateRefreshToken(string refreshToken)
     {
+        if (string.IsNullOrWhiteSpace(refreshToken))
+            return new RefreshTokenValidation(false, reason: "Invalid refresh token");
+
         var handler = new JsonWebTokenHandler();
 
-        var result = handler.ValidateToken(refreshToken, new TokenValidationParameters()
+        // RequireSignedTokens is true by default: unsigned ("alg": "none") tokens are rejected.
+        // ValidTypes makes sure an access token (at+jwt) can't be used as a refresh token.
+        var result = await handler.ValidateTokenAsync(refreshToken, new TokenValidationParameters()
         {
-            RequireSignedTokens = false,
-            ValidIssuer = _settings.Value.Issuer,
+            ValidIssuer = GetIssuer(),
             ValidAudience = _settings.Value.Audience,
-            IssuerSigningKey = await _jwtService.GetCurrentSecurityKey(),
+            IssuerSigningKeys = await GetValidationKeys(),
+            ValidTypes = new[] { RefreshTokenJwtType },
         });
 
         if (!result.IsValid)
-            return new RefreshTokenValidation(false);
+            return new RefreshTokenValidation(false, reason: "Invalid refresh token");
 
+        var userId = result.ClaimsIdentity.GetUserId();
+        var user = string.IsNullOrEmpty(userId) ? null : await _userManager.FindByIdAsync(userId);
+        if (user is null)
+            return new RefreshTokenValidation(false, reason: "User not found");
 
-        var user = await _userManager.FindByIdAsync(result.ClaimsIdentity.GetUserId());
         var claims = await _userManager.GetClaimsAsync(user);
 
         var jti = result.ClaimsIdentity.GetJwtId();
@@ -285,11 +291,33 @@ internal class JwtBuilderInject<TIdentityUser, TKey> : IJwtBuilder
             if (!claims.Any(c => c.Type == "LastRefreshToken" && c.Value == jti))
                 return new RefreshTokenValidation(false, reason: "Refresh Token already used");
 
-        if (user.LockoutEnabled)
-            if (user.LockoutEnd < DateTime.Now)
-                return new RefreshTokenValidation(false, reason: "User blocked");
+        if (await _userManager.IsLockedOutAsync(user))
+            return new RefreshTokenValidation(false, reason: "User blocked");
 
-        return new RefreshTokenValidation(true, result.ClaimsIdentity.GetUserId());
+        return new RefreshTokenValidation(true, user.Id.ToString());
+    }
+
+    private string GetIssuer()
+    {
+        var issuer = _settings.Value.Issuer;
+        if (string.IsNullOrEmpty(issuer))
+            issuer = $"{_httpContext.HttpContext.Request.Scheme}://{_httpContext.HttpContext.Request.Host}";
+        return issuer;
+    }
+
+    /// <summary>
+    /// Keys that may have signed a refresh token: the configured symmetric key, or the last keys of the JWKS store
+    /// (so tokens signed before a key rotation are still accepted until they expire).
+    /// </summary>
+    private async Task<IEnumerable<SecurityKey>> GetValidationKeys()
+    {
+#pragma warning disable CS0618 // SecretKey is obsolete but still supported
+        if (!string.IsNullOrEmpty(_settings.Value.SecretKey))
+            return new[] { new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_settings.Value.SecretKey)) };
+#pragma warning restore CS0618
+
+        var keys = await _jwtService.GetLastKeys();
+        return keys.Select(k => (SecurityKey)k.GetSecurityKey()).ToList();
     }
 
     private static long ToUnixEpochDate(DateTime date)

@@ -54,12 +54,13 @@ public class JwtBuilderTests : IAsyncLifetime
     private async Task<TokenValidationResult> ValidateAccessToken(string token)
     {
         using var scope = _provider.CreateScope();
-        var key = await scope.ServiceProvider.GetRequiredService<IJwtService>().GetCurrentSecurityKey();
+        // Validate like NetDevPack.Security.Jwt does: against the last keys of the store, not only the current one
+        var keys = await scope.ServiceProvider.GetRequiredService<IJwtService>().GetLastKeys();
         return await new JsonWebTokenHandler().ValidateTokenAsync(token, new TokenValidationParameters
         {
             ValidIssuer = Issuer,
             ValidAudience = Audience,
-            IssuerSigningKey = key,
+            IssuerSigningKeys = keys.Select(k => (SecurityKey)k.GetSecurityKey()).ToList(),
         });
     }
 
