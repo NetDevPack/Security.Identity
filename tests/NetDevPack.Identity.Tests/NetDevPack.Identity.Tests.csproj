@@ -16,6 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- NetDevPack.Security.Jwt PersistKeysInMemory() keeps keys in a static list shared by every host in the process,
+         and /jwks publishes only the last keys: tests that issue tokens must not run in parallel. -->
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\NetDevPack.Identity\NetDevPack.Identity.csproj" />
   </ItemGroup>
 
