@@ -25,6 +25,15 @@ If you liked the project or if NetDevPack helped you, please give a star ;)
 dotnet add package NetDevPack.Identity
 ```
 
+### Compatibility
+
+| Version | Target frameworks | NetDevPack.Security.Jwt |
+| ------- | ----------------- | ----------------------- |
+| 9.x     | .NET 10 (LTS)     | 10.x |
+| 8.x     | .NET 8, .NET 10   | 8.x |
+
+> **Breaking change in v9:** .NET 8 is out of support since 2026-11-10 and is no longer targeted. If you need it, stay on 8.x. The public API did not change.
+
 If you want to use our IdentityDbContext (ASP.NET Identity standard) you will need to create the Identity tables. Set your connection string in the `appsettings.json` and follow the next steps:
 
 Add the IdentityDbContext configuration in your `startup.cs`:
