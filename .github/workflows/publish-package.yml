@@ -3,9 +3,20 @@ name: Master - Publish packages
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing release to publish again (e.g. 8.0.1). Builds tag v<version> and pushes it to nuget.org.
+        required: true
 
 env:
   CURRENT_REPO_URL: https://github.com/${{ github.repository }}
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write # NuGet trusted publishing (OIDC)
 
 jobs:
   build:
@@ -14,7 +25,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+        with:
+          ref: ${{ inputs.version && format('v{0}', inputs.version) || github.sha }}
+
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
@@ -24,7 +37,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 9.0.x
-          
+
       - name: Setup .NET 10
         uses: actions/setup-dotnet@v3
         with:
@@ -32,6 +45,7 @@ jobs:
 
       - name: Semantic Release
         id: semantic
+        if: github.event_name == 'push'
         uses: cycjimmy/semantic-release-action@v4
         with:
           extra_plugins: |
@@ -40,8 +54,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Resolve version
+        id: version
+        if: github.event_name == 'workflow_dispatch' || steps.semantic.outputs.new_release_published == 'true'
+        env:
+          VERSION: ${{ inputs.version || steps.semantic.outputs.new_release_version }}
+        run: |
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]] || { echo "::error::Invalid version '$VERSION'"; exit 1; }
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Generate Package
-        run: dotnet pack -c Release -o out -p:PackageVersion=${{ steps.semantic.outputs.new_release_version }} -p:RepositoryUrl=${{env.CURRENT_REPO_URL}}
+        if: steps.version.outputs.value != ''
+        run: dotnet pack -c Release -o out -p:PackageVersion=${{ steps.version.outputs.value }} -p:RepositoryUrl=${{env.CURRENT_REPO_URL}}
+
+      - name: NuGet login (trusted publishing)
+        id: nuget
+        if: steps.version.outputs.value != ''
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
 
       - name: Publish the package to nuget.org
-        run: dotnet nuget push ./out/*.nupkg --skip-duplicate -n -d -k ${{ secrets.NUGET_AUTH_TOKEN}} -s https://api.nuget.org/v3/index.json
+        if: steps.version.outputs.value != ''
+        run: dotnet nuget push ./out/*.nupkg --skip-duplicate -n -d -k ${{ steps.nuget.outputs.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
