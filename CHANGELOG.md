@@ -1,3 +1,20 @@
+## [9.0.0](https://github.com/NetDevPack/Security.Identity/compare/v8.0.1...v9.0.0) (2026-11-18)
+
+### ⚠ BREAKING CHANGES
+
+* the package now targets .NET 10 only and depends on
+NetDevPack.Security.Jwt 10. Stay on 8.x for .NET 8.
+
+* fix: point package URLs to Security.Identity
+
+* ci: use conventionalcommits release preset
+
+* fix: validate refresh token signature and type
+
+### Features
+
+* target .NET 10 and update dependencies ([#30](https://github.com/NetDevPack/Security.Identity/issues/30)) ([9af62e2](https://github.com/NetDevPack/Security.Identity/commit/9af62e248398305dea40880a620b1bf37450e01f)), closes [#31](https://github.com/NetDevPack/Security.Identity/issues/31) [#31](https://github.com/NetDevPack/Security.Identity/issues/31)
+
 ## [8.0.1](https://github.com/NetDevPack/Security.Identity/compare/v8.0.0...v8.0.1) (2026-11-18)
 
 
