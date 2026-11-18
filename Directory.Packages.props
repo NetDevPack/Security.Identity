@@ -12,23 +12,16 @@
     <!-- Library -->
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.15" />
-    <PackageVersion Include="NetDevPack.Security.Jwt.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="NetDevPack.Security.Jwt.AspNetCore" Version="11.0.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
-
-    <!--
-      Transitive pins: NetDevPack.Security.Jwt 10.0.0 depends on System.Security.Cryptography.Xml/Pkcs 10.0.12,
-      which have high severity advisories. Remove after moving to NetDevPack.Security.Jwt 11.
-    -->
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.15" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.15" />
 
     <!-- Sample -->
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.15" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.15" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
-    <PackageVersion Include="NetDevPack" Version="8.0.2" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.3.1" />
+    <PackageVersion Include="NetDevPack" Version="9.0.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="11.0.1" />
 
     <!-- Tests -->
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />

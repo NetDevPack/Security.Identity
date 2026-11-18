@@ -29,7 +29,7 @@ dotnet add package NetDevPack.Identity
 
 | Version | Target frameworks | NetDevPack.Security.Jwt |
 | ------- | ----------------- | ----------------------- |
-| 9.x     | .NET 10 (LTS)     | 10.x |
+| 9.x     | .NET 10 (LTS)     | 11.x (from 9.0.1) |
 | 8.x     | .NET 8, .NET 10   | 8.x |
 
 > **Breaking change in v9:** .NET 8 is out of support since 2026-11-10 and is no longer targeted. If you need it, stay on 8.x. The public API did not change.
