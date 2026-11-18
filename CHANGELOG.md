@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/NetDevPack/Security.Identity/compare/v8.0.0...v8.0.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* validate refresh token signature and type ([#31](https://github.com/NetDevPack/Security.Identity/issues/31)) ([811df9a](https://github.com/NetDevPack/Security.Identity/commit/811df9a68f599781acb48e1858d3f0ec69c5fdf9))
+
 # [8.0.0](https://github.com/NetDevPack/Security.Identity/compare/v7.0.1...v8.0.0) (2026-02-05)
 
 
