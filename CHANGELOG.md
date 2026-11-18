@@ -1,3 +1,9 @@
+## [9.0.1](https://github.com/NetDevPack/Security.Identity/compare/v9.0.0...v9.0.1) (2026-11-18)
+
+### Bug Fixes
+
+* **deps:** move to NetDevPack.Security.Jwt 11 ([#37](https://github.com/NetDevPack/Security.Identity/issues/37)) ([4840e68](https://github.com/NetDevPack/Security.Identity/commit/4840e681f2ad0135791b4c1ce00d465570899024))
+
 ## [9.0.0](https://github.com/NetDevPack/Security.Identity/compare/v8.0.1...v9.0.0) (2026-11-18)
 
 ### ⚠ BREAKING CHANGES
